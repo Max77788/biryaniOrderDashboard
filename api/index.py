@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-@app.route('/orders/', methods=['GET','POST'])
+@app.route('/orders/', methods=['POST'])
 def add_order_record():
     data = request.json
     order_number = data.get('orderNumber')
