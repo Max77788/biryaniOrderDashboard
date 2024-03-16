@@ -11,4 +11,9 @@
       "dest": "index.py"
     }
   ]
+  "functions": {
+    "/*": {
+      "maxDuration": 30 // All functions can run for a maximum of 5 seconds
+    }
+  }
 }
