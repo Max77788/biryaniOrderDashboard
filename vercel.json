@@ -12,7 +12,7 @@
     }
   ]
   "functions": {
-    "/*": {
+    "/**/*": {
       "maxDuration": 30 
     }
   }
