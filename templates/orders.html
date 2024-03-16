@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Orders</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #ff79c6;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        ul > li {
+            background-color: #fff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        ul > li > ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+        li:last-child {
+            margin-bottom: 0;
+        }
+        .order-number {
+            font-weight: bold;
+            color: #d65a31;
+        }
+    </style>
+</head>
+<body>
+    <h1>Biryani Orders</h1>
+    <ul>
+    {% for order in orders %}
+    <!-- Debugging: print the order object or just the items -->
+
+    
+    <li>Order Number: {{ order.orderId }}
+            <ul>
+            {% for item in order['foods'] %}
+                <li>{{ item['name'] }}: {{ item['quantity'] }}</li>
+            {% endfor %}
+            </ul>
+        </li>
+    {% endfor %}
+    </ul>
+    <script>
+        // Refresh the page every 20 seconds
+        setTimeout(function() {
+            window.location.reload(1);
+        }, 20000);
+    </script>
+</body>
+</html>
