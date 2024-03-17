@@ -5,7 +5,7 @@ import os
 #from models.models_mongo import Order, Item
 from pymongo import MongoClient
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../templates")
 
 #disconnect()
 
@@ -18,7 +18,7 @@ app.config['MONGODB_HOST'] = os.getenv("MONGODB_URI")
 # use a database named "myDatabase"
 #db = MongoEngine(app)
 
-client = MongoClient(os.getenv("MONGODB_URI"))
+client = MongoClient(os.environ.get("MONGODB_URI"))
 
 orders_db = client.orders
 
