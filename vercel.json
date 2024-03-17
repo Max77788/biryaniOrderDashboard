@@ -7,7 +7,7 @@
   ],
   
   "functions": {
-    "api/*.py": {
+    "**/*.py": {
       "maxDuration": 40
     }
   }
