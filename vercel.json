@@ -1,7 +1,6 @@
 {
   "functions": {
-    "index.py": {
-      "runtime": "python3.9.13", 
+    "index.py": { 
       "maxDuration": 40 
     }
   },
