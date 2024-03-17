@@ -12,10 +12,10 @@
     }
   ],
   
-  "functions": [{
+  "functions": {
     "**/*.py": {
       "maxDuration": 40
     }
   }
-  ]
+  
 }
