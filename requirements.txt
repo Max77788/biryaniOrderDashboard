@@ -1,2 +1,3 @@
 Flask==3.0.0
 git+https://github.com/idoshr/flask-mongoengine.git@1.0.1
+pymongo
