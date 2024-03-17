@@ -4,6 +4,8 @@ import os
 #from flask_mongoengine import MongoEngine
 #from models.models_mongo import Order, Item
 from pymongo import MongoClient
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv())
 
 app = Flask(__name__, template_folder="../templates")
 
