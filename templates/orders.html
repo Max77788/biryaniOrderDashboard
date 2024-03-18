@@ -42,13 +42,13 @@
 </head>
 <body>
     <h1>Biryani Orders</h1>
-    {{orders}}
     <ul>    
     {% for order in orders %}
     <!-- Debugging: print the order object or just the items -->
-
+   
     
-    <li>Order Number: {{ order.orderId }}
+    <li>Order Number: {{ order.orderId }}<br><br>
+        Made at: {{ order.timestamp }}<br><br>
             <ul>
             {% for item in order['foods'] %}
                 <li>{{ item['name'] }}: {{ item['quantity'] }}</li>

@@ -5,6 +5,8 @@ import os
 #from models.models_mongo import Order, Item
 from pymongo import MongoClient
 from dotenv import load_dotenv, find_dotenv
+from datetime import datetime
+
 load_dotenv(find_dotenv())
 
 app = Flask(__name__, template_folder="../templates")
@@ -40,10 +42,16 @@ def add_order_record():
         data = request.json
         items_data = data.get('items', [])  # Default to an empty list if not provided
         
+        # Get current UTC time and format it as dd.mm hh:mm
+        timestamp_utc = datetime.utcnow().strftime('%d.%m %H:%M')
+
         # Create Item instances for each item in the request
         #items = [Item(name=item['name'], quantity=item['quantity']) for item in items_data]
         
-        order_to_pass = {"orderNumber":order_number_counter, "items":[{'name':item['name'], 'quantity':item['quantity']} for item in items_data]}
+        order_to_pass = {"orderNumber":order_number_counter, 
+                         "items":[{'name':item['name'], 'quantity':item['quantity']} for item in items_data], 
+                         "timestamp": timestamp_utc}
+        
         print(order_to_pass, "\n\n\n\n")
 
 
@@ -89,7 +97,8 @@ def view_orders():
         # If 'orderNumber' is not defined in your Order model, you might want to use str(order.id)
         order_info = {
             'orderId': order['orderNumber'],
-            'foods': [item for item in order['items']]
+            'foods': [item for item in order['items']],
+            'timestamp': order['timestamp']
         }
         orders_list.append(order_info)
         print("Orders_list: \n\n", orders_list, "\n\n\n\n")
