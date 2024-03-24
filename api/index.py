@@ -69,7 +69,7 @@ def add_order_record():
         #order = Order(items=items, orderNumber=order_number_counter)
         
         order_number_counter += 1
-        if data["items"]:
+        if 'items' in data:
             # Save the order to the selected collection and keep the reference
             order_collection.insert_one(order_to_pass)  # Assuming Order has a to_mongo method       
             return jsonify({"response":"Order Successfully Posted with \"published:False\"!"})
