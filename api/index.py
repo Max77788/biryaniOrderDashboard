@@ -40,6 +40,7 @@ def add_order_record():
     
     if request.method == 'POST':
         data = request.json
+        print("POST order on orders endpoint: ", data)
         items_data = data.get('items', [])  # Default to an empty list if not provided
         
         # Get current UTC time and format it as dd.mm hh:mm
@@ -71,7 +72,7 @@ def add_order_record():
         if data["items"]:
             # Save the order to the selected collection and keep the reference
             order_collection.insert_one(order_to_pass)  # Assuming Order has a to_mongo method       
-            return jsonify({"response":"Order Successfully Posted!"})
+            return jsonify({"response":"Order Successfully Posted with \"published:False\"!"})
         elif data["action"] == "PUBLISH_THE_ORDER":
             last_inserted_document = order_collection.find().sort('_id', -1).limit(1)
 
