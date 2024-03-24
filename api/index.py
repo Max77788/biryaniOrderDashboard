@@ -73,37 +73,44 @@ def add_order_record():
             # Save the order to the selected collection and keep the reference
             order_collection.insert_one(order_to_pass)  # Assuming Order has a to_mongo method       
             return jsonify({"response":"Order Successfully Posted with \"published:False\"!"})
-        elif data["action"] == "PUBLISH_THE_ORDER":
-            last_inserted_document = order_collection.find().sort('_id', -1).limit(1)
-
-            # Since `find` returns a cursor, we convert it to a list to access the document
-            # If there is a document, it will be the first in the list
-            if last_inserted_document:
-                document_to_post = list(last_inserted_document)[0]
-                print(document_to_post)
-                # Update the 'published' attribute of the fetched document to True
-                result = order_collection.update_one({'_id': document_to_post['_id']}, {'$set': {'published': True}})
-
-                # Check if the update was successful
-                if result.matched_count > 0:
-                    print("Document updated successfully. Published set to True.")
-                else:
-                    print("Document not found for update.")
         
-        elif data["action"] == "DELETE_THE_ORDER":
-            last_inserted_document = order_collection.find().sort('_id', -1).limit(1)
-            if last_inserted_document:
-                document_to_delete = list(last_inserted_document)[0]
-                print(document_to_delete)
+        if 'action' in data:
 
-                # Delete the fetched document
-                delete_result = order_collection.delete_one({'_id': document_to_delete['_id']})
+            if data["action"] == "PUBLISH_THE_ORDER":
+                last_inserted_document = order_collection.find().sort('_id', -1).limit(1)
 
-                # Check if the delete was successful
-                if delete_result.deleted_count > 0:
-                    print("Document deleted successfully.")
-                else:
-                    print("No document was deleted.")
+                # Since `find` returns a cursor, we convert it to a list to access the document
+                # If there is a document, it will be the first in the list
+                if last_inserted_document:
+                    document_to_post = list(last_inserted_document)[0]
+                    print(document_to_post)
+                    # Update the 'published' attribute of the fetched document to True
+                    result = order_collection.update_one({'_id': document_to_post['_id']}, {'$set': {'published': True}})
+
+                    # Check if the update was successful
+                    if result.matched_count > 0:
+                        print("Document updated successfully. Published set to True.")
+                        return "Document updated successfully. Published set to True."
+                    else:
+                        print("Document not found for update.")
+                        return "Document not found for update."
+            
+            elif data["action"] == "DELETE_THE_ORDER":
+                last_inserted_document = order_collection.find().sort('_id', -1).limit(1)
+                if last_inserted_document:
+                    document_to_delete = list(last_inserted_document)[0]
+                    print(document_to_delete)
+
+                    # Delete the fetched document
+                    delete_result = order_collection.delete_one({'_id': document_to_delete['_id']})
+
+                    # Check if the delete was successful
+                    if delete_result.deleted_count > 0:
+                        print("Document deleted successfully.")
+                        return "Document deleted successfully."
+                    else:
+                        print("No document was deleted.")
+                        return "No document was deleted."
     
     elif request.method == 'GET':
         # For a GET request, return a simple message
