@@ -131,7 +131,8 @@ def view_orders():
         order_info = {
             'orderId': order['orderNumber'],
             'foods': [item for item in order['items']],
-            'timestamp': order['timestamp']
+            'timestamp': order['timestamp'],
+            'published':order['published']
         }
         orders_list.append(order_info)
         print("Orders_list: \n\n", orders_list, "\n\n\n\n")
