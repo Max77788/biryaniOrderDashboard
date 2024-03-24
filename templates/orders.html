@@ -63,21 +63,21 @@
 </head>
 <body>
     <h1>Biryani Orders</h1>
-    <ul>    
-    {% for order in orders %}
-    <!-- Debugging: print the order object or just the items -->
-   
-    
-    <li>Order Number: {{ order.orderId }}<br><br>
-        Made at: {{ order.timestamp }}<br><br>
+    <ul>
+        {% for order in orders %}
+        {% if order.published %}
+        <li>Order Number: {{ order.orderId }}<br><br>
+            Made at: {{ order.timestamp }}<br><br>
             <ul>
             {% for item in order['foods'] %}
                 <li>{{ item['name'] }}: {{ item['quantity'] }}</li>
             {% endfor %}
             </ul>
         </li>
-    {% endfor %}
+        {% endif %}
+        {% endfor %}
     </ul>
+    
     <script>
         // Refresh the page every 20 seconds
         setTimeout(function() {

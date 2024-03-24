@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, jsonify
 import os
 #from mongoengine import connect, disconnect
 #from flask_mongoengine import MongoEngine
@@ -50,7 +50,8 @@ def add_order_record():
         
         order_to_pass = {"orderNumber":order_number_counter, 
                          "items":[{'name':item['name'], 'quantity':item['quantity']} for item in items_data], 
-                         "timestamp": timestamp_utc}
+                         "timestamp": timestamp_utc,
+                         "published":False}
         
         print(order_to_pass, "\n\n\n\n")
 
@@ -67,11 +68,42 @@ def add_order_record():
         #order = Order(items=items, orderNumber=order_number_counter)
         
         order_number_counter += 1
+        if data["items"]:
+            # Save the order to the selected collection and keep the reference
+            order_collection.insert_one(order_to_pass)  # Assuming Order has a to_mongo method       
+            return jsonify({"response":"Order Successfully Posted!"})
+        elif data["action"] == "PUBLISH_THE_ORDER":
+            last_inserted_document = order_collection.find().sort('_id', -1).limit(1)
+
+            # Since `find` returns a cursor, we convert it to a list to access the document
+            # If there is a document, it will be the first in the list
+            if last_inserted_document:
+                document_to_post = list(last_inserted_document)[0]
+                print(document_to_post)
+                # Update the 'published' attribute of the fetched document to True
+                result = order_collection.update_one({'_id': document_to_post['_id']}, {'$set': {'published': True}})
+
+                # Check if the update was successful
+                if result.matched_count > 0:
+                    print("Document updated successfully. Published set to True.")
+                else:
+                    print("Document not found for update.")
         
-        # Save the order to the selected collection and keep the reference
-        order_collection.insert_one(order_to_pass)  # Assuming Order has a to_mongo method       
-        
-        return "Order Successfully Posted!"
+        elif data["action"] == "DELETE_THE_ORDER":
+            last_inserted_document = order_collection.find().sort('_id', -1).limit(1)
+            if last_inserted_document:
+                document_to_delete = list(last_inserted_document)[0]
+                print(document_to_delete)
+
+                # Delete the fetched document
+                delete_result = order_collection.delete_one({'_id': document_to_delete['_id']})
+
+                # Check if the delete was successful
+                if delete_result.deleted_count > 0:
+                    print("Document deleted successfully.")
+                else:
+                    print("No document was deleted.")
+    
     elif request.method == 'GET':
         # For a GET request, return a simple message
         return 'Send a POST request to submit an order.'
