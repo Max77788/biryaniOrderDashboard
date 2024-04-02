@@ -24,7 +24,12 @@ app.config['MONGODB_HOST'] = os.getenv("MONGODB_URI")
 
 client = MongoClient(os.environ.get("MONGODB_URI"))
 
-orders_db = client.orders
+restaurant_name = os.environ.get("RESTAURANT")
+
+if restaurant_name == "Biryani":
+  orders_db = client.orders_biryani
+elif restaurant_name == "GamaBC":
+  orders_db = client.orders_gamabc
 
 order_number_counter = 1
 
@@ -145,7 +150,7 @@ def view_orders():
         print("Orders_list: \n\n", orders_list, "\n\n\n\n")
 
     # Render the HTML page with orders
-    return render_template('orders.html', orders=orders_list)
+    return render_template('orders.html', orders=orders_list, restaurant_name=restaurant_name)
 
     # For simplicity, return JSON representation of the orders
     #return jsonify(orders=orders_list)
